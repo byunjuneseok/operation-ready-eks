@@ -22,17 +22,17 @@ module "vpc" {
     }
 
     private_subnet_tags = {
-        Private = true
+        type = "private"
     }
     public_subnet_tags = {
-        Private = false
+        type = "public"
     }
 
     database_subnet_tags = {
-        Private = true
+        type = "database"
     }
 
     elasticache_subnet_tags = {
-        Private = true
+        type = "elasticache"
     }
 }
