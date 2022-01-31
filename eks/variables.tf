@@ -30,3 +30,8 @@ variable "eks_managed_node_group_default_instance_types" {
   description = "List of instance types for EKS-managed node group default"
   default = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
 }
+
+variable "application_namespaces" {
+  type = list(string)
+  description = "List of namespaces for k8s apps"
+}
