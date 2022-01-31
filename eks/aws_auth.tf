@@ -51,6 +51,7 @@ resource "null_resource" "patch" {
 
 resource "null_resource" "patch_admin" {
   triggers = {
+    order = null_resource.patch.id
     kube_config = base64encode(local.kube_config)
     cmd_patch  = "kubectl patch configmap/aws-auth --patch \"${local.admin_users_map_config}\" -n kube-system --kubeconfig <(echo $KUBECONFIG | base64 --decode)"
   }
