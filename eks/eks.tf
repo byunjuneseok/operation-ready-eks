@@ -7,12 +7,22 @@ resource "aws_kms_key" "encryption_key" {
 }
 
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
+  source  = "registry.terraform.io/terraform-aws-modules/eks/aws"
   version = "18.2.3"
   #  https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
+
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      resolve_conflicts = "OVERWRITE"
+    }
+  }
 
   cluster_encryption_config = [
     {
@@ -71,17 +81,15 @@ module "eks" {
       max_size     = 10
       desired_size = 1
 
-      instance_types = ["t3.large"]
+      instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
 
       tags = local.common_tags
     }
-
   }
 
   tags = local.common_tags
 }
-
 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
