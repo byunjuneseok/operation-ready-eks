@@ -1,3 +1,13 @@
+locals {
+  common_tags = {
+    Name        = var.cluster_name
+    Terraform   = true
+    Environment = var.environment
+  }
+}
+
+data "aws_caller_identity" "current" {}
+
 data "aws_vpc" "cluster_vpc" {
   tags = {
       Name = var.cluster_name

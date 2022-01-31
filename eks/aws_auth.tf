@@ -26,7 +26,7 @@ locals {
   })
 
   admin_users_map_config = templatefile(
-    "${path.module}/role.yml",
+    "${path.module}/aws_auth_template.yml",
     {
       account_id = data.aws_caller_identity.current.account_id
       admin_users = ["agd"]
