@@ -3,4 +3,6 @@ cluster_name    = "..."
 cluster_region  = "ap-northeast-2"
 environment     = "..."
 
+cluster_domain_name = "..."
+
 application_namespaces = []

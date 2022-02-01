@@ -1,9 +1,36 @@
-resource "kubernetes_namespace" "ingress" {
+resource "kubernetes_namespace" "ingress_nginx" {
   metadata {
     annotations = {
-      name = "ingress"
+      name = "ingress-nginx"
     }
-  name = "ingress"
+  name = "ingress-nginx"
+  }
+}
+
+resource "kubernetes_namespace" "prometheus" {
+  metadata {
+    annotations = {
+      name = "prometheus"
+    }
+  name = "prometheus"
+  }
+}
+
+resource "kubernetes_namespace" "grafana" {
+  metadata {
+    annotations = {
+      name = "grafana"
+    }
+  name = "grafana"
+  }
+}
+
+resource "kubernetes_namespace" "argo-cd" {
+  metadata {
+    annotations = {
+      name = "argo-cd"
+    }
+    name = "argo-cd"
   }
 }
 

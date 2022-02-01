@@ -31,6 +31,11 @@ variable "eks_managed_node_group_default_instance_types" {
   default = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
 }
 
+variable "cluster_domain_name" {
+  type = string
+  description = "Domain name for cluster"
+}
+
 variable "application_namespaces" {
   type = list(string)
   description = "List of namespaces for k8s apps"
