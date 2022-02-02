@@ -3,7 +3,7 @@ module "iam_assumable_role_karpenter" {
   version                       = "4.10.1"
   create_role                   = true
   role_name                     = "${var.environment}-${var.cluster_name}-karpenter-controller"
-  provider_url                  = module.eks.cluster_oidc_issuer_url
+  provider_url                  = local.oidc_url
   oidc_fully_qualified_subjects = ["system:serviceaccount:karpenter:karpenter"]
 }
 
@@ -35,6 +35,12 @@ resource "aws_iam_policy" "karpenter_controller" {
     ]
   })
 }
+
+resource "aws_iam_role_policy_attachment" "kubernetes_karpenter_controller" {
+  role       = module.iam_assumable_role_karpenter.iam_role_name
+  policy_arn = aws_iam_policy.karpenter_controller.arn
+}
+
 
 resource "aws_iam_role" "karpenter_node" {
   name                = "${var.environment}-${var.cluster_name}-karpenter-node"

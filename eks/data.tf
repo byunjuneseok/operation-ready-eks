@@ -50,6 +50,10 @@ data "aws_route53_zone" "cluster_domain" {
   name = var.cluster_domain_name
 }
 
+locals {
+  oidc_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+}
+
 data "kubernetes_service" "ingress_nginx" {
   metadata {
     name      = "ingress-nginx-controller"
