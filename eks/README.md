@@ -25,6 +25,13 @@ terraform plan
 terraform apply
 ```
 
+## Fix bug of `ingress-nginx`
+> release argo-cd failed, and has been rolled back due to atomic being set: failed to create resource: Internal error occurred: failed calling webhook "validate.nginx.ingress.kubernetes.io": Post "https://ingress-nginx-controller-admission.ingress-nginx.svc:443/networking/v1/ingresses?timeout=10s": context deadline exceeded
+
+```shell
+kubectl delete validatingwebhookconfiguration ingress-nginx-admission
+```
+
 # Namespaces
 | namespace | description |
 | --------- | ----------- |

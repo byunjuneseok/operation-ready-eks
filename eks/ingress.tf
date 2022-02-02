@@ -7,21 +7,18 @@ resource "helm_release" "ingress_nginx_controller" {
   atomic     = true
   timeout    = 900
 
+  # https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
+  set {
+    name  = "controller.ingressClassResource.name"
+    value = "ingress-nginx"
+  }
   set {
     name  = "controller.metrics.enabled"
     value = "true"
   }
-  #  set {
-  #    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
-  #    value = "true"
-  #  }
-  #  set {
-  #    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
-  #    value = "10254"
-  #  }
   set {
     name  = "controller.service.targetPorts.http"
-    value = "http"
+    value = "80"
   }
   set {
     name  = "controller.service.targetPorts.https"
@@ -33,11 +30,15 @@ resource "helm_release" "ingress_nginx_controller" {
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"
-    value = "https"
+    value = "443"
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
     value = aws_acm_certificate.cluster_domain.id
+  }
+  set {
+    name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-connection-idle-timeout"
+    value = "3600"
   }
   # https://aws.amazon.com/ko/blogs/opensource/network-load-balancer-nginx-ingress-controller-eks/
   set {
