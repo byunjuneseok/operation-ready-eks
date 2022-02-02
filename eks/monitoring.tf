@@ -6,6 +6,20 @@ resource "helm_release" "prometheus" {
   namespace  = "monitoring"
   atomic     = true
   timeout    = 900
+
+  set{
+    name = "alertmanager.persistentVolume.storageClass"
+    value = "gp2"
+  }
+  set{
+    name = "server.persistentVolume.storageClass"
+    value = "gp2"
+  }
+  set{
+    name = "pushgateway.persistentVolume.storageClass"
+    value = "gp2"
+  }
+
   depends_on = [kubernetes_namespace.monitoring]
 }
 
@@ -53,5 +67,10 @@ resource "helm_release" "grafana" {
     name  = "grafana\\.ini.server.root_url"
     value = "http://grafana.${var.cluster_domain_name}"
   }
+  set {
+    name  = "adminPassword"
+    value = "admin"
+  }
+
   depends_on = [kubernetes_namespace.monitoring]
 }
