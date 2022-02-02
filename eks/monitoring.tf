@@ -74,3 +74,15 @@ resource "helm_release" "grafana" {
 
   depends_on = [kubernetes_namespace.monitoring]
 }
+
+resource "aws_route53_record" "grafana" {
+  zone_id = data.aws_route53_zone.cluster_domain.id
+  name    = "grafana.${var.cluster_domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = local.lb_hostname
+    zone_id                = data.aws_lb.ingress_nginx.zone_id
+    evaluate_target_health = true
+  }
+}
