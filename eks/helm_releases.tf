@@ -11,6 +11,14 @@ resource "helm_release" "ingress_nginx_controller" {
     name  = "controller.metrics.enabled"
     value = "true"
   }
+  #  set {
+  #    name  = "controller.metrics.service.annotations.prometheus\\.io/scrape"
+  #    value = "true"
+  #  }
+  #  set {
+  #    name  = "controller.metrics.service.annotations.prometheus\\.io/port"
+  #    value = "10254"
+  #  }
   set {
     name  = "controller.service.targetPorts.http"
     value = "http"
@@ -42,63 +50,63 @@ resource "helm_release" "ingress_nginx_controller" {
     aws_acm_certificate.cluster_domain
   ]
 }
-
-resource "helm_release" "prometheus" {
-  chart      = "prometheus"
-  name       = "prometheus"
-  repository = "https://prometheus-community.github.io/helm-charts"
-  version    = "15.1.1"
-  namespace  = "prometheus"
-  atomic     = true
-  timeout    = 900
-  values     = [
-    yamlencode({
-      "podSecurityPolicy.enabled" : true
-      "server.persistentVolume.enabled" : false
-      "server.resources" : {
-        limits   = {
-          cpu    = "200m"
-          memory = "50Mi"
-        }
-        requests = {
-          cpu    = "100m"
-          memory = "30Mi"
-        }
-      }
-    })
-  ]
-
-  depends_on = [kubernetes_namespace.prometheus]
-}
-
+#
+#resource "helm_release" "prometheus" {
+#  chart      = "prometheus"
+#  name       = "prometheus"
+#  repository = "https://prometheus-community.github.io/helm-charts"
+#  version    = "15.1.1"
+#  namespace  = "monitoring"
+#  atomic     = true
+#  timeout    = 900
+#  depends_on = [kubernetes_namespace.monitoring]
+#}
 #
 #resource "helm_release" "grafana" {
 #  chart      = "grafana"
 #  name       = "grafana"
 #  repository = "https://grafana.github.io/helm-charts"
 #  version    = "6.21.2"
-#  namespace  = "grafana"
+#  namespace  = "monitoring"
 #  atomic     = true
 #  timeout    = 900
-#  values     = [
-#    yamlencode({
-#      "persistence.enabled" : false
-#      "datasources.datasources.yaml" : {
-#        "apiVersion" : 1
-#        "datasources" : [
-#          {
-#            "name" : "Prometheus"
-#            "type" : "prometheus"
-#            "url" : "http://prometheus-server.prometheus.svc.cluster.local"
-#            "access" : "proxy"
-#            "isDefault" : "true"
-#          }
-#        ]
-#      }
-#    })
-#  ]
-#
-#  depends_on = [kubernetes_namespace.grafana]
+#  set {
+#    name  = "service.type"
+#    value = "LoadBalancer"
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.apiVersion"
+#    value = 1
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.datasources[0].name"
+#    value = "Prometheus"
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.datasources[0].type"
+#    value = "prometheus"
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.datasources[0].url"
+#    value = "http://prometheus-server.monitoring.svc.cluster.local"
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.datasources[0].access"
+#    value = "proxy"
+#  }
+#  set {
+#    name  = "datasources.datasources\\.yaml.datasources[0].isDefault"
+#    value = "true"
+#  }
+#  set {
+#    name  = "grafana\\.ini.server.domain"
+#    value = "grafana.${var.cluster_domain_name}"
+#  }
+#  set {
+#    name  = "grafana\\.ini.server.root_url"
+#    value = "http://grafana.${var.cluster_domain_name}"
+#  }
+#  depends_on = [kubernetes_namespace.monitoring]
 #}
 
 

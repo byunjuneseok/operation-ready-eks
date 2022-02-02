@@ -7,21 +7,21 @@ resource "kubernetes_namespace" "ingress_nginx" {
   }
 }
 
-resource "kubernetes_namespace" "prometheus" {
+resource "kubernetes_namespace" "monitoring" {
   metadata {
     annotations = {
-      name = "prometheus"
+      name = "monitoring"
     }
-  name = "prometheus"
+    name = "monitoring"
   }
 }
 
-resource "kubernetes_namespace" "grafana" {
+resource "kubernetes_namespace" "karpenter" {
   metadata {
     annotations = {
-      name = "grafana"
+      name = "karpenter"
     }
-  name = "grafana"
+    name = "karpenter"
   }
 }
 
