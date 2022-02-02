@@ -28,7 +28,7 @@ resource "aws_acm_certificate_validation" "eks_domain_cert_validation" {
   validation_record_fqdns = [for record in aws_route53_record.eks_domain_cert_validation_dns : record.fqdn]
 }
 
-resource "aws_route53_record" "cluster_domain" {
+resource "aws_route53_record" "base" {
   zone_id = data.aws_route53_zone.cluster_domain.id
   name    = var.cluster_domain_name
   type    = "A"
